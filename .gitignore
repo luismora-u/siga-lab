@@ -1,0 +1,23 @@
+# Dependencias
+node_modules/
+
+# Configuracion local y secretos (nunca versionar)
+.env
+.env.*
+!.env.example
+
+# Artefactos de ejecucion y pruebas
+*.log
+coverage/
+
+# Sistema operativo / OneDrive
+Thumbs.db
+desktop.ini
+~$*
+
+# Documentos ofimaticos: este repositorio contiene unicamente el sistema.
+# Los entregables del curso se gestionan fuera del control de versiones.
+*.docx
+*.doc
+*.pdf
+*.tmp
