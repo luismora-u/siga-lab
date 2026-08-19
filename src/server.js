@@ -6,6 +6,7 @@ const laboratorios = require('./modules/laboratorios');
 const reservas = require('./modules/reservas');
 
 const VERSION = require('../package.json').version;
+const COMMIT = process.env.GIT_COMMIT || 'sin-commit';
 
 function responder(res, codigo, cuerpo) {
   res.writeHead(codigo, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -35,7 +36,7 @@ const servidor = http.createServer(async (req, res) => {
 
   // Endpoint de salud: usado por el pipeline para verificar el despliegue (criterio C5).
   if (req.method === 'GET' && ruta === '/salud') {
-    return responder(res, 200, { estado: 'ok', version: VERSION, entorno: config.entorno });
+    return responder(res, 200, { estado: 'ok', version: VERSION, entorno: config.entorno, commit: COMMIT });
   }
 
   if (req.method === 'GET' && ruta === '/laboratorios') {
