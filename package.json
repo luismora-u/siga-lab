@@ -1,6 +1,6 @@
 {
   "name": "siga-lab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sistema de Gestion de Agendamiento de Laboratorios - caso de estudio del curso de Gestion de Configuracion y Mantenimiento de Software",
   "main": "src/server.js",
   "scripts": {

@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0] - 2026-08-19
+### Agregado
+- CI-INF-01: pipeline de integración continua con GitHub Actions
+  (`npm install` + `npm test` en cada push y pull request hacia main).
+  Refs: CR-002
+- Campo `commit` en el endpoint `/salud`, cerrando el eslabón de
+  trazabilidad extremo a extremo. Refs: CR-001
+- Prueba de cobertura para `/salud` (antes sin cobertura, DT-5 parcial).
+
+### Corregido
+- Descubrimiento de archivos de prueba portátil entre Windows y el
+  runner de Ubuntu (antes fallaba con el patrón glob explícito). Refs: CR-002
+
 ## [0.1.0] - 2026-07-22
 ### Agregado
 - Línea base inicial del sistema SIGA-Lab.
