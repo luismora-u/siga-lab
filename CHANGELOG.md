@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1] - 2026-08-28
+### Cambiado
+- `src/server.js`: el enrutamiento pasa de una cadena de condicionales a
+  una tabla declarativa de rutas (reduce DT-3). Sin cambio de contrato;
+  verificado por la suite existente sin modificar sus aserciones.
+  Refs: CR-005
+
 ## [0.2.0] - 2026-08-19
 ### Agregado
 - CI-INF-01: pipeline de integración continua con GitHub Actions

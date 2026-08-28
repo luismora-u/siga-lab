@@ -31,38 +31,56 @@ function leerCuerpo(req) {
   });
 }
 
+// Endpoint de salud: usado por el pipeline para verificar el despliegue (criterio C5).
+function manejarSalud(req, res) {
+  return responder(res, 200, { estado: 'ok', version: VERSION, entorno: config.entorno, commit: COMMIT });
+}
+
+function manejarListarLaboratorios(req, res) {
+  return responder(res, 200, laboratorios.listar());
+}
+
+function manejarListarReservas(req, res) {
+  return responder(res, 200, reservas.listar());
+}
+
+async function manejarCrearReserva(req, res) {
+  try {
+    const cuerpo = await leerCuerpo(req);
+    const reserva = reservas.crear({
+      labId: cuerpo.labId,
+      usuarioId: cuerpo.usuarioId,
+      inicio: new Date(cuerpo.inicio),
+    });
+    return responder(res, 201, reserva);
+  } catch (error) {
+    const codigo = error instanceof reservas.ErrorReserva ? 409 : 400;
+    return responder(res, codigo, { error: error.codigo || 'SOLICITUD_INVALIDA', mensaje: error.message });
+  }
+}
+
+// Tabla declarativa de rutas (DT-3): agregar un endpoint es agregar una entrada,
+// no extender una cadena de condicionales que compite por el mismo archivo.
+const rutas = [
+  { metodo: 'GET', ruta: '/salud', manejador: manejarSalud },
+  { metodo: 'GET', ruta: '/laboratorios', manejador: manejarListarLaboratorios },
+  { metodo: 'GET', ruta: '/reservas', manejador: manejarListarReservas },
+  { metodo: 'POST', ruta: '/reservas', manejador: manejarCrearReserva },
+];
+
+function encontrarRuta(metodo, ruta) {
+  return rutas.find((r) => r.metodo === metodo && r.ruta === ruta) || null;
+}
+
 const servidor = http.createServer(async (req, res) => {
   const ruta = new URL(req.url, `http://${req.headers.host}`).pathname;
+  const coincidencia = encontrarRuta(req.method, ruta);
 
-  // Endpoint de salud: usado por el pipeline para verificar el despliegue (criterio C5).
-  if (req.method === 'GET' && ruta === '/salud') {
-    return responder(res, 200, { estado: 'ok', version: VERSION, entorno: config.entorno, commit: COMMIT });
+  if (!coincidencia) {
+    return responder(res, 404, { error: 'RUTA_NO_ENCONTRADA', mensaje: `No existe ${req.method} ${ruta}` });
   }
 
-  if (req.method === 'GET' && ruta === '/laboratorios') {
-    return responder(res, 200, laboratorios.listar());
-  }
-
-  if (req.method === 'GET' && ruta === '/reservas') {
-    return responder(res, 200, reservas.listar());
-  }
-
-  if (req.method === 'POST' && ruta === '/reservas') {
-    try {
-      const cuerpo = await leerCuerpo(req);
-      const reserva = reservas.crear({
-        labId: cuerpo.labId,
-        usuarioId: cuerpo.usuarioId,
-        inicio: new Date(cuerpo.inicio),
-      });
-      return responder(res, 201, reserva);
-    } catch (error) {
-      const codigo = error instanceof reservas.ErrorReserva ? 409 : 400;
-      return responder(res, codigo, { error: error.codigo || 'SOLICITUD_INVALIDA', mensaje: error.message });
-    }
-  }
-
-  return responder(res, 404, { error: 'RUTA_NO_ENCONTRADA', mensaje: `No existe ${req.method} ${ruta}` });
+  return coincidencia.manejador(req, res);
 });
 
 if (require.main === module) {
