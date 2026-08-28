@@ -7,6 +7,12 @@
   verificado por la suite existente sin modificar sus aserciones.
   Refs: CR-005
 
+### Corregido
+- MC-2: `POST /reservas` rechaza fechas de inicio invalidas en lugar de
+  confirmar una reserva con `inicio`/`fin` nulos. Defecto verificado
+  empiricamente en la Unidad 1 (Anexo D) y anticipado en el diseño de
+  la Actividad 2 (§6.4) como ejemplo de commit tipo PARCHE. Refs: CR-004
+
 ## [0.2.0] - 2026-08-19
 ### Agregado
 - CI-INF-01: pipeline de integración continua con GitHub Actions
