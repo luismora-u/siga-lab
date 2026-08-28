@@ -41,6 +41,10 @@ function crear({ labId, usuarioId, inicio, ahora = new Date() }) {
     throw new ErrorReserva('LAB_NO_EXISTE', `El laboratorio ${labId} no existe`);
   }
 
+  if (Number.isNaN(inicio.getTime())) {
+    throw new ErrorReserva('FECHA_INVALIDA', 'La fecha de inicio no es valida');
+  }
+
   const horasDeAntelacion = (inicio.getTime() - ahora.getTime()) / 3_600_000;
   if (horasDeAntelacion < config.antelacionMinimaHoras) {
     throw new ErrorReserva(

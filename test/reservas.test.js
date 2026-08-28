@@ -25,6 +25,15 @@ test('rechaza un laboratorio inexistente', () => {
   );
 });
 
+// Reproduce el defecto MC-2 verificado empiricamente en la Unidad 1 (Anexo D):
+// una fecha invalida producia una reserva CONFIRMADA con inicio/fin nulos.
+test('rechaza una fecha de inicio invalida (MC-2)', () => {
+  assert.throws(
+    () => reservas.crear({ labId: 'LAB-COMP-01', usuarioId: 'est-001', inicio: new Date('fecha-basura'), ahora: AHORA }),
+    (e) => e.codigo === 'FECHA_INVALIDA',
+  );
+});
+
 test('rechaza una reserva sin la antelacion minima configurada', () => {
   const insuficiente = config.antelacionMinimaHoras - 0.5;
   assert.throws(
