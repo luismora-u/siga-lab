@@ -1,6 +1,17 @@
 # Changelog
 
 ## [0.2.1] - 2026-08-28
+### Agregado
+- CI-DEP-01: `package-lock.json`, proyectado en la Actividad 2 (BL-1)
+  y nunca materializado hasta ahora. Cierra DT-6 (construcciones no
+  deterministas). El pipeline pasa de `npm install` a `npm ci`.
+- Verificacion estatica con ESLint (`eslint.config.js`, script `npm run
+  lint`), integrada como paso obligatorio del pipeline antes de las
+  pruebas. Cierra DT-7. La primera ejecucion encontro un hallazgo real
+  (global `URL` no declarado en `src/server.js`), corregido en este
+  mismo cambio.
+  Refs: CR-006
+
 ### Cambiado
 - `src/server.js`: el enrutamiento pasa de una cadena de condicionales a
   una tabla declarativa de rutas (reduce DT-3). Sin cambio de contrato;
