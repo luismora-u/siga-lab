@@ -19,7 +19,10 @@ jobs:
           node-version: '20.x'
 
       - name: Instalar dependencias
-        run: npm install
+        run: npm ci
+
+      - name: Verificacion estatica (lint)
+        run: npm run lint
 
       - name: Ejecutar pruebas
         run: npm test
